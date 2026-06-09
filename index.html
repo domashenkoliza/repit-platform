@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Репит — Найди идеального репетитора</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --text-primary: #1a2a3a;
+            --text-secondary: #555;
+            --border-color: #ddd;
+            --card-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            --header-bg: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            --hero-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --section-bg: #eef2ff;
+        }
+        body.dark {
+            --bg-primary: #1a1a2e;
+            --bg-secondary: #16213e;
+            --text-primary: #e0e0e0;
+            --text-secondary: #aaa;
+            --border-color: #2a2a4a;
+            --card-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            --header-bg: linear-gradient(135deg, #0f0c29 0%, #302b63 100%);
+            --hero-bg: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            --section-bg: #0f0c29;
+        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: var(--text-primary); background: var(--bg-primary); transition: all 0.3s ease; }
+        header { background: var(--header-bg); color: white; padding: 1rem 0; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .header-flex { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        .logo { font-size: 1.8rem; font-weight: bold; cursor: pointer; }
+        .logo span { color: #ffd700; }
+        .nav-links { display: flex; gap: 25px; flex-wrap: wrap; }
+        .nav-links a { color: white; text-decoration: none; font-weight: 500; transition: 0.3s; cursor: pointer; }
+        .nav-links a:hover { color: #ffd700; }
+        .auth-buttons { display: flex; gap: 12px; align-items: center; }
+        .theme-toggle { background: rgba(255,255,255,0.2); border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 1.2rem; transition: 0.3s; }
+        .theme-toggle:hover { background: rgba(255,255,255,0.3); }
+        .btn { padding: 8px 20px; border: none; border-radius: 25px; cursor: pointer; font-weight: 600; transition: 0.3s; font-size: 0.9rem; }
+        .btn-outline { background: transparent; border: 2px solid white; color: white; }
+        .btn-outline:hover { background: white; color: #2a5298; }
+        .btn-primary { background: #ffd700; color: #1e3c72; }
+        .btn-primary:hover { background: #ffed4a; transform: translateY(-2px); }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-danger:hover { background: #c82333; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-success:hover { background: #218838; }
+        .btn-info { background: #17a2b8; color: white; }
+        .btn-info:hover { background: #138496; }
+        .btn-secondary { background: #6c757d; color: white; }
+        .btn-secondary:hover { background: #5a6268; }
+        .hero { background: var(--hero-bg); color: white; padding: 80px 0; text-align: center; }
+        .hero h1 { font-size: 3rem; margin-bottom: 20px; }
+        .hero p { font-size: 1.3rem; margin-bottom: 30px; }
+        .search-box { max-width: 600px; margin: 0 auto; display: flex; gap: 10px; background: white; border-radius: 50px; padding: 5px; }
+        .search-box input { flex: 1; padding: 15px 25px; border: none; border-radius: 50px; font-size: 1rem; outline: none; }
+        .search-box button { background: #ffd700; border: none; padding: 0 30px; border-radius: 50px; font-weight: bold; cursor: pointer; }
+        section { padding: 80px 0; }
+        .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 50px; color: var(--text-primary); }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .service-card { background: var(--bg-secondary); border-radius: 15px; padding: 30px; text-align: center; transition: 0.3s; box-shadow: var(--card-shadow); }
+        .service-card:hover { transform: translateY(-10px); }
+        .service-icon { font-size: 3rem; margin-bottom: 20px; }
+        .service-card h3 { margin-bottom: 15px; color: #2a5298; }
+        .reviews-slider { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .review-card { background: var(--bg-secondary); border-radius: 15px; padding: 25px; box-shadow: var(--card-shadow); }
+        .stars { color: #ffd700; font-size: 1.3rem; margin-bottom: 15px; }
+        .review-text { font-style: italic; margin-bottom: 20px; color: var(--text-secondary); }
+        .review-author { font-weight: bold; color: #2a5298; }
+        .filters { background: var(--bg-secondary); padding: 20px; border-radius: 15px; margin-bottom: 30px; box-shadow: var(--card-shadow); }
+        .filters-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
+        .filter-group { display: flex; flex-direction: column; }
+        .filter-group label { font-weight: 600; margin-bottom: 5px; color: var(--text-primary); }
+        .filter-group input, .filter-group select { padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-primary); color: var(--text-primary); }
+        .tutors-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
+        .tutor-card { background: var(--bg-secondary); border-radius: 15px; padding: 20px; box-shadow: var(--card-shadow); transition: 0.3s; }
+        .tutor-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .tutor-avatar { width: 70px; height: 70px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white; }
+        .tutor-info h3 { color: var(--text-primary); }
+        .tutor-stats { display: flex; gap: 15px; margin: 10px 0; font-size: 0.9rem; color: var(--text-secondary); }
+        .tutor-subjects { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+        .subject-tag { background: #e8f4f8; padding: 4px 12px; border-radius: 15px; font-size: 0.8rem; color: #2a5298; }
+        body.dark .subject-tag { background: #2a2a4a; color: #ffd700; }
+        .form-container { max-width: 600px; margin: 0 auto; background: var(--bg-secondary); padding: 40px; border-radius: 20px; box-shadow: var(--card-shadow); }
+        .form-group { margin-bottom: 20px; position: relative; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-primary); }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem; background: var(--bg-primary); color: var(--text-primary); }
+        .password-wrapper { position: relative; }
+        .password-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; background: none; border: none; font-size: 1.2rem; }
+        .requests-table { width: 100%; background: var(--bg-secondary); border-radius: 15px; overflow-x: auto; box-shadow: var(--card-shadow); }
+        .requests-table table { width: 100%; border-collapse: collapse; }
+        .requests-table th, .requests-table td { padding: 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        .requests-table th { background: #667eea; color: white; }
+        .status-badge { padding: 4px 12px; border-radius: 15px; font-size: 0.85rem; font-weight: 600; display: inline-block; }
+        .status-pending { background: #ffc107; color: #333; }
+        .status-approved { background: #28a745; color: white; }
+        .status-confirmed { background: #28a745; color: white; }
+        .chat-button { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1500; box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
+        .chat-button span { font-size: 2rem; }
+        .chat-window { position: fixed; bottom: 100px; right: 30px; width: 350px; height: 500px; background: var(--bg-secondary); border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: none; flex-direction: column; z-index: 1501; overflow: hidden; }
+        .chat-window.active { display: flex; }
+        .chat-header { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .close-chat { cursor: pointer; font-size: 1.5rem; }
+        .chat-messages { flex: 1; padding: 15px; overflow-y: auto; background: var(--bg-primary); }
+        .quick-questions { padding: 10px; border-top: 1px solid var(--border-color); background: var(--bg-primary); display: flex; flex-wrap: wrap; gap: 8px; }
+        .quick-question { background: #667eea; color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; cursor: pointer; }
+        .quick-question:hover { background: #764ba2; }
+        .message { margin-bottom: 15px; display: flex; flex-direction: column; }
+        .message.user { align-items: flex-end; }
+        .message.support { align-items: flex-start; }
+        .message-content { max-width: 80%; padding: 10px 15px; border-radius: 15px; }
+        .message.user .message-content { background: #667eea; color: white; }
+        .message.support .message-content { background: var(--bg-secondary); border: 1px solid var(--border-color); color: var(--text-primary); }
+        .chat-input-area { padding: 15px; border-top: 1px solid var(--border-color); display: flex; gap: 10px; background: var(--bg-secondary); }
+        .chat-input-area input { flex: 1; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-primary); color: var(--text-primary); }
+        footer { background: #1a2a3a; color: white; padding: 40px 0; text-align: center; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; justify-content: center; align-items: center; }
+        .modal.active { display: flex; }
+        .modal-content { background: var(--bg-secondary); padding: 40px; border-radius: 20px; max-width: 700px; width: 90%; position: relative; max-height: 90vh; overflow-y: auto; }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 1.8rem; cursor: pointer; color: #999; }
+        .notification { position: fixed; bottom: 20px; left: 20px; background: #28a745; color: white; padding: 15px 25px; border-radius: 10px; display: none; z-index: 3000; animation: slideIn 0.3s; }
+        .user-info { color: white; display: flex; align-items: center; gap: 10px; }
+        .page { display: none; }
+        .page.active { display: block; }
+        .upcoming-lesson { background: var(--bg-primary); padding: 15px; border-radius: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; border-left: 4px solid #28a745; }
+        .admin-section { margin-bottom: 50px; }
+        .admin-section h3 { margin-bottom: 20px; color: var(--text-primary); border-bottom: 2px solid #667eea; padding-bottom: 10px; }
+        .copy-btn { background: #6c757d; color: white; border: none; padding: 4px 10px; border-radius: 5px; cursor: pointer; font-size: 0.75rem; margin-left: 8px; }
+        .copy-btn:hover { background: #5a6268; }
+        .password-cell { font-family: monospace; font-size: 0.9rem; }
+        .profile-info { background: var(--bg-secondary); border-radius: 20px; padding: 30px; margin-bottom: 30px; box-shadow: var(--card-shadow); }
+        .profile-avatar { width: 100px; height: 100px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 3rem; margin-bottom: 20px; }
+        .doc-upload-area { border: 2px dashed var(--border-color); border-radius: 15px; padding: 30px; text-align: center; margin-top: 20px; }
+        .doc-list { margin-top: 15px; }
+        .doc-item { background: var(--bg-primary); padding: 10px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .download-app-btn { position: fixed; bottom: 100px; left: 30px; background: linear-gradient(135deg, #28a745, #20c997); color: white; border: none; padding: 12px 20px; border-radius: 50px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 1499; display: flex; align-items: center; gap: 8px; }
+        .download-app-btn:hover { transform: scale(1.05); }
+        .pending-badge { background: #ffc107; color: #333; padding: 2px 8px; border-radius: 12px; font-size: 0.7rem; margin-left: 8px; }
+        .admin-tabs { display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
+        .admin-tab { padding: 10px 25px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 30px; cursor: pointer; transition: 0.3s; }
+        .admin-tab.active { background: #667eea; color: white; border-color: #667eea; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-bottom: 20px; }
+        .calendar-day { background: var(--bg-primary); border-radius: 10px; padding: 10px; text-align: center; cursor: pointer; transition: 0.3s; border: 1px solid var(--border-color); }
+        .calendar-day:hover { background: #667eea; color: white; }
+        .calendar-day.selected { background: #667eea; color: white; }
+        .calendar-day.weekend { background: #ffc10720; }
+        .calendar-day.disabled { opacity: 0.3; cursor: not-allowed; }
+        .time-slots { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+        .time-slot { padding: 8px 16px; background: #28a745; color: white; border-radius: 25px; cursor: pointer; transition: 0.3s; font-size: 0.85rem; }
+        .time-slot:hover { transform: scale(1.05); background: #218838; }
+        .time-slot.booked { background: #dc3545; opacity: 0.6; cursor: not-allowed; }
+        .time-slot.booked:hover { transform: none; background: #dc3545; }
+        .selected-tutor-info { background: var(--bg-primary); padding: 15px; border-radius: 15px; margin-bottom: 20px; text-align: center; }
+        
+        /* Стили для личного чата */
+        .chat-modal-content { max-width: 500px; padding: 0; display: flex; flex-direction: column; height: 600px; }
+        .chat-modal-header { padding: 15px 20px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 20px 20px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .chat-modal-messages { flex: 1; padding: 20px; overflow-y: auto; background: var(--bg-primary); }
+        .chat-modal-input { padding: 15px; border-top: 1px solid var(--border-color); display: flex; gap: 10px; background: var(--bg-secondary); border-radius: 0 0 20px 20px; }
+        .chat-modal-input input { flex: 1; padding: 10px; border: 1px solid var(--border-color); border-radius: 25px; background: var(--bg-primary); color: var(--text-primary); }
+        .private-message { margin-bottom: 15px; display: flex; flex-direction: column; }
+        .private-message.sent { align-items: flex-end; }
+        .private-message.received { align-items: flex-start; }
+        .message-bubble { max-width: 80%; padding: 10px 15px; border-radius: 18px; word-wrap: break-word; }
+        .private-message.sent .message-bubble { background: #667eea; color: white; border-bottom-right-radius: 4px; }
+        .private-message.received .message-bubble { background: var(--bg-secondary); border: 1px solid var(--border-color); color: var(--text-primary); border-bottom-left-radius: 4px; }
+        .message-time { font-size: 0.7rem; margin-top: 4px; color: var(--text-secondary); }
+        .private-message.sent .message-time { text-align: right; }
+        .chat-list-item { padding: 12px; border-bottom: 1px solid var(--border-color); cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 12px; }
+        .chat-list-item:hover { background: var(--bg-primary); }
+        .chat-list-avatar { width: 45px; height: 45px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+        .chat-list-info { flex: 1; }
+        .chat-list-name { font-weight: bold; }
+        .chat-list-last { font-size: 0.8rem; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
+        .unread-badge { background: #dc3545; color: white; border-radius: 50%; padding: 2px 8px; font-size: 0.7rem; margin-left: 8px; }
+        @keyframes slideIn { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @media (max-width: 768px) { .header-flex { flex-direction: column; text-align: center; } .hero h1 { font-size: 2rem; } .section-title { font-size: 1.8rem; } .search-box { flex-direction: column; background: transparent; gap: 15px; } .calendar-grid { grid-template-columns: repeat(2, 1fr); } }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container header-flex">
+        <div class="logo" onclick="showMainPage()">Ре<span>пит</span></div>
+        <div class="nav-links" id="navLinks">
+            <a onclick="showMainPage()">Главная</a>
+            <a onclick="showTutorsPage()">Репетиторы</a>
+            <a id="profileLink" onclick="showProfilePage()" style="display:none;">👤 Профиль</a>
+            <a id="myLessonsLink" onclick="showMyLessonsPage()" style="display:none;">🎓 Мои занятия</a>
+            <a id="myChatsLink" onclick="showMyChatsPage()" style="display:none;">💬 Чаты</a>
+            <a id="tutorScheduleLink" onclick="showTutorSchedulePage()" style="display:none;">📆 Расписание</a>
+            <a id="tutorBookingsLink" onclick="showTutorBookingsPage()" style="display:none;">📋 Записи</a>
+            <a id="adminPanelLink" onclick="showAdminPanel()" style="display:none;">📊 Админ-панель</a>
+        </div>
+        <div class="auth-buttons" id="authButtons">
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        </div>
+    </div>
+</header>
+
+<!-- Главная страница -->
+<div id="mainPage" class="page active">
+    <section class="hero">
+        <div class="container">
+            <h1>Найди идеального репетитора</h1>
+            <p>Образование, которое меняет будущее — подберем преподавателя под ваш стиль обучения</p>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Поиск предмета или репетитора...">
+                <button onclick="quickSearch()">Найти</button>
+            </div>
+        </div>
+    </section>
+    
+    <section id="services"><div class="container"><h2 class="section-title">Наши услуги</h2><div class="services-grid">
+        <div class="service-card"><div class="service-icon">📚</div><h3>Школьные предметы</h3><p>Математика, русский, физика, химия, история</p></div>
+        <div class="service-card"><div class="service-icon">🎓</div><h3>Подготовка к ЕГЭ/ОГЭ</h3><p>Интенсивные курсы и индивидуальные занятия</p></div>
+        <div class="service-card"><div class="service-icon">💻</div><h3>Программирование</h3><p>Python, JavaScript, Java, C++ — с нуля до профи</p></div>
+        <div class="service-card"><div class="service-icon">🌍</div><h3>Иностранные языки</h3><p>Английский, немецкий, французский, китайский</p></div>
+        <div class="service-card"><div class="service-icon">🎨</div><h3>Творчество и хобби</h3><p>Рисование, музыка, дизайн, фотография</p></div>
+        <div class="service-card"><div class="service-icon">🚀</div><h3>Soft Skills</h3><p>Ораторское искусство, тайм-менеджмент, лидерство</p></div>
+    </div></div></section>
+
+    <section id="about" style="background: var(--section-bg);"><div class="container"><h2 class="section-title">О компании Репит</h2><div style="max-width:800px;margin:0 auto;text-align:center;"><p>✨ <strong>Слоган:</strong> "Ваш успех — наша миссия. Обучение без границ!" ✨</p><p>Репит — инновационная платформа, соединяющая учеников и лучших репетиторов.</p></div></div></section>
+
+    <section id="reviews"><div class="container"><h2 class="section-title">Отзывы учеников</h2><div class="reviews-slider" id="reviewsContainer"></div></div></section>
+</div>
+
+<!-- Страница репетиторов -->
+<div id="tutorsPage" class="page"><section style="padding:40px 0 80px 0;"><div class="container"><h2 class="section-title">Наши репетиторы</h2>
+    <div class="filters"><div class="filters-grid">
+        <div class="filter-group"><label>Поиск</label><input type="text" id="tutorNameSearch" placeholder="Имя..."></div>
+        <div class="filter-group"><label>Предмет</label><select id="subjectFilter"></select></div>
+        <div class="filter-group"><label>Рейтинг</label><select id="ratingFilter"><option value="0">Любой</option><option value="4.5">4.5+</option><option value="4.8">4.8+</option></select></div>
+        <div class="filter-group"><label>Цена</label><select id="priceFilter"><option value="10000">Любая</option><option value="1000">до 1000</option><option value="1500">до 1500</option><option value="2000">до 2000</option></select></div>
+    </div><button class="btn btn-primary" onclick="filterTutors()">Применить</button></div>
+    <div id="tutorsList" class="tutors-grid"></div></div></section></div>
+
+<!-- Страница профиля -->
+<div id="profilePage" class="page"><section style="padding:40px 0 80px 0;"><div class="container"><h2 class="section-title">👤 Мой профиль</h2>
+    <div class="profile-info" id="profileContent"></div>
+</div></section></div>
+
+<!-- Страница чатов -->
+<div id="myChatsPage" class="page"><section style="padding:40px 0 80px 0;"><div class="container"><h2 class="section-title">💬 Мои чаты</h2>
+    <div id="chatsList" class="requests-table"></div>
+</div></section></div>
+
+<!-- Страница занятий ученика -->
+<div id="myLessonsPage" class="page"><section style="padding:40px 0 80px 0;"><div class="container"><h2 class="section-title">🎓 Мои занятия</h2><div id="myLessonsList"></div></div></section></div>
+
+<!-- Страница расписания репетитора -->
+<div id="tutorSchedulePage" class="page"><section style="padding:40px 0 80px 0;"><div class="container"><h2 class="section-title">📆 Моё расписание</h2><div id="tutorScheduleList"></div></div></section></div>
+
+<!-- Страница записей к репетитору (для репетитора) -->
+<div id="tutorBookingsPage" class="page"><section style="padding:40px 0 80px 0;"><div class="container"><h2 class="section-title">📋 Записи учеников</h2><div id="tutorBookingsList" class="requests-table"></div></div></section></div>
+
+<!-- Админ-панель -->
+<div id="adminPanelPage" class="page"><section style="padding:40px 0 80px 0;"><div class="container">
+    <h2 class="section-title">📊 Админ-панель</h2>
+    <div class="admin-tabs">
+        <div class="admin-tab active" onclick="switchAdminTab('tutors')">👨‍🏫 Список репетиторов</div>
+        <div class="admin-tab" onclick="switchAdminTab('pending')">⏳ Заявки репетиторов <span id="pendingCountBadge" style="background:#ffc107;color:#333;padding:0 6px;border-radius:10px;margin-left:5px;">0</span></div>
+        <div class="admin-tab" onclick="switchAdminTab('add')">➕ Добавить репетитора</div>
+        <div class="admin-tab" onclick="switchAdminTab('subjects')">📚 Предметы</div>
+    </div>
+    
+    <div id="tabTutors" class="tab-content active">
+        <div class="admin-section"><h3>👨‍🏫 Список репетиторов (с логинами и паролями)</h3>
+            <div style="margin-bottom: 10px; padding: 10px; background: #e8f4f8; border-radius: 8px;"><small>📋 Здесь отображаются все подтверждённые репетиторы. Пароли можно скопировать кнопкой "Копировать".</small></div>
+            <div id="tutorsAccountsList" class="requests-table"></div>
+        </div>
+    </div>
+    
+    <div id="tabPending" class="tab-content">
+        <div class="admin-section"><h3>⏳ Новые заявки от репетиторов на модерацию</h3>
+            <div id="pendingTutorsList" class="tutors-grid"></div>
+        </div>
+    </div>
+    
+    <div id="tabAdd" class="tab-content">
+        <div class="admin-section"><h3>➕ Добавить нового репетитора</h3><div class="form-container" style="max-width:600px;">
+            <div class="form-group"><label>Имя *</label><input type="text" id="newTutorName" placeholder="Например: Анна Иванова"></div>
+            <div class="form-group"><label>Аватар (эмодзи)</label><input type="text" id="newTutorAvatar" placeholder="👩‍🏫"></div>
+            <div class="form-group"><label>Предметы * (через запятую)</label><input type="text" id="newTutorSubjects" placeholder="Математика, Физика"></div>
+            <div class="form-group"><label>Цена (руб/час) *</label><input type="number" id="newTutorPrice" placeholder="1500"></div>
+            <div class="form-group"><label>Рейтинг *</label><input type="number" step="0.1" id="newTutorRating" placeholder="4.9"></div>
+            <div class="form-group"><label>Опыт работы</label><input type="text" id="newTutorExp" placeholder="8 лет"></div>
+            <div class="form-group"><label>Образование</label><input type="text" id="newTutorEdu" placeholder="МГУ"></div>
+            <div class="form-group"><label>О себе</label><textarea id="newTutorAbout" rows="3" placeholder="Краткое описание..."></textarea></div>
+            <hr style="margin:20px 0;">
+            <h4>🔐 Данные для входа репетитора</h4>
+            <div class="form-group"><label>Логин (Email) *</label><input type="email" id="newTutorEmail" placeholder="tutor@example.com"></div>
+            <div class="form-group"><div class="password-wrapper"><label>Пароль *</label><input type="password" id="newTutorPassword" placeholder="минимум 6 символов"><button class="password-toggle" onclick="togglePassword('newTutorPassword')">👁️</button></div></div>
+            <div class="form-group"><label>Телефон *</label><input type="tel" id="newTutorPhone" placeholder="+7 (999) 123-45-67"></div>
+            <button class="btn btn-primary" onclick="addTutorWithAccount()">Добавить репетитора</button>
+        </div></div>
+    </div>
+    
+    <div id="tabSubjects" class="tab-content">
+        <div class="admin-section"><h3>📚 Управление предметами</h3><div class="form-container" style="max-width:500px;">
+            <div class="form-group"><label>Новый предмет</label><input type="text" id="newSubject" placeholder="Например: Биология"></div>
+            <button class="btn btn-primary" onclick="addSubject()">Добавить предмет</button>
+            <div style="margin-top:20px;"><h4>Существующие предметы:</h4><div id="subjectsList" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;"></div></div>
+        </div></div>
+    </div>
+</div></section></div>
+
+<footer><div class="container"><p>© 2025 Репит — платформа по поиску репетиторов</p></div></footer>
+
+<!-- Кнопка скачать приложение -->
+<button class="download-app-btn" onclick="showNotification('Скачивание приложения скоро будет доступно! 📱', 'info')">📱 Скачать приложение</button>
+
+<!-- Общий чат поддержки -->
+<div class="chat-button" onclick="toggleChat()"><span>💬</span></div>
+<div class="chat-window" id="chatWindow">
+    <div class="chat-header"><h4>💬 Поддержка</h4><span class="close-chat" onclick="toggleChat()">×</span></div>
+    <div class="chat-messages" id="chatMessages"><div class="message support"><div class="message-content">Здравствуйте! Чем помочь?</div></div></div>
+    <div class="quick-questions" id="quickQuestions"></div>
+    <div class="chat-input-area"><input type="text" id="chatInput" placeholder="Вопрос..." onkeypress="if(event.key==='Enter') sendMessage()"><button onclick="sendMessage()">Отправить</button></div>
+</div>
+
+<!-- Модалки -->
+<div id="loginModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('login')">&times;</span><h3 style="text-align:center;">🔐 Вход</h3>
+    <div class="form-group"><label>Email</label><input type="email" id="loginEmail"></div>
+    <div class="form-group"><div class="password-wrapper"><label>Пароль</label><input type="password" id="loginPassword"><button class="password-toggle" onclick="togglePassword('loginPassword')">👁️</button></div></div>
+    <button class="btn btn-primary" style="width:100%;" onclick="handleLogin()">Войти</button>
+    <p style="margin-top:15px;text-align:center;">Нет аккаунта? <a href="#" onclick="switchToRegister()">Зарегистрируйтесь</a></p>
+</div></div>
+
+<div id="registerModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('register')">&times;</span><h3 style="text-align:center;">📝 Регистрация</h3>
+    <div class="form-group"><label>Имя</label><input type="text" id="regName"></div>
+    <div class="form-group"><label>Email</label><input type="email" id="regEmail"></div>
+    <div class="form-group"><label>Телефон</label><input type="tel" id="regPhone"></div>
+    <div class="form-group"><div class="password-wrapper"><label>Пароль</label><input type="password" id="regPassword"><button class="password-toggle" onclick="togglePassword('regPassword')">👁️</button></div></div>
+    <div class="form-group"><label>Регистрация как</label><select id="regRole"><option value="student">👨‍🎓 Ученик</option><option value="tutor">👨‍🏫 Репетитор</option></select></div>
+    <button class="btn btn-primary" style="width:100%;" onclick="handleRegister()">Зарегистрироваться</button>
+    <p style="margin-top:15px;text-align:center;">Уже есть аккаунт? <a href="#" onclick="switchToLogin()">Войти</a></p>
+</div></div>
+
+<div id="calendarModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeCalendarModal()">&times;</span>
+    <h3 style="text-align:center;" id="calendarModalTitle">📅 Выберите дату и время</h3>
+    <div id="selectedTutorInfo" class="selected-tutor-info"></div>
+    <div id="calendarContainer"></div>
+    <div id="timeSlotsContainer" class="time-slots"></div>
+    <div style="margin-top: 20px; text-align: center;">
+        <button class="btn btn-secondary" onclick="closeCalendarModal()">Отмена</button>
+    </div>
+</div></div>
+
+<div id="editProfileModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeEditProfileModal()">&times;</span><h3 style="text-align:center;">✏️ Редактировать профиль</h3>
+    <div class="form-group"><label>Имя</label><input type="text" id="editName"></div>
+    <div class="form-group"><label>Телефон</label><input type="tel" id="editPhone"></div>
+    <button class="btn btn-primary" style="width:100%;" onclick="saveProfileChanges()">Сохранить</button>
+</div></div>
+
+<div id="changePasswordModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closePasswordModal()">&times;</span><h3 style="text-align:center;">🔑 Сменить пароль</h3>
+    <div class="form-group"><label>Текущий пароль</label><input type="password" id="oldPassword"></div>
+    <div class="form-group"><label>Новый пароль</label><input type="password" id="newPassword"></div>
+    <div class="form-group"><label>Подтверждение пароля</label><input type="password" id="confirmPassword"></div>
+    <button class="btn btn-primary" style="width:100%;" onclick="changePassword()">Сменить пароль</button>
+</div></div>
+
+<div id="viewTutorModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeViewTutorModal()">&times;</span><h3 style="text-align:center;" id="viewTutorTitle">Информация о репетиторе</h3>
+    <div id="viewTutorContent"></div>
+    <div style="display: flex; gap: 15px; margin-top: 20px;">
+        <button class="btn btn-success" onclick="approveTutorApplication()">✅ Подтвердить</button>
+        <button class="btn btn-danger" onclick="rejectTutorApplication()">❌ Отклонить</button>
+        <button class="btn btn-secondary" onclick="closeViewTutorModal()">Закрыть</button>
+    </div>
+</div></div>
+
+<!-- Модалка личного чата -->
+<div id="privateChatModal" class="modal"><div class="modal-content chat-modal-content" style="padding: 0;">
+    <div class="chat-modal-header">
+        <span id="privateChatTitle">Чат с пользователем</span>
+        <span class="close-modal" onclick="closePrivateChat()">&times;</span>
+    </div>
+    <div id="privateChatMessages" class="chat-modal-messages" style="height: 400px; overflow-y: auto;"></div>
+    <div class="chat-modal-input">
+        <input type="text" id="privateChatInput" placeholder="Введите сообщение..." onkeypress="if(event.key==='Enter') sendPrivateMessage()">
+        <button class="btn btn-primary" onclick="sendPrivateMessage()">Отправить</button>
+    </div>
+</div></div>
+
+<div id="notification" class="notification"></div>
+
+<script>
+    let tutorsDB = [], subjects = ["Математика", "Русский язык", "Английский язык", "Программирование", "Физика", "Химия"];
+    let requests = [], bookings = [], privateMessages = [], currentUser = null, selectedTutorForBooking = null, selectedDate = null;
+    let currentChatPartner = null;
+    
+    const timeSlots = ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00"];
+
+    const defaultTutors = [
+        { id: 1, name: "Алексей Иванов", avatar: "📐", subjects: ["Математика", "Физика"], price: 1500, rating: 4.9, experience: "8 лет", education: "МГУ", about: "Эксперт по подготовке к ЕГЭ и ОГЭ", status: "approved" },
+        { id: 2, name: "Мария Петрова", avatar: "📊", subjects: ["Математика"], price: 2000, rating: 5.0, experience: "12 лет", education: "ВШЭ", about: "Кандидат физико-математических наук", status: "approved" },
+        { id: 3, name: "James Brown", avatar: "🇬🇧", subjects: ["Английский язык"], price: 1800, rating: 4.8, experience: "10 лет", education: "Cambridge", about: "Носитель языка, разговорный и бизнес английский", status: "approved" },
+        { id: 4, name: "Олег Смирнов", avatar: "💻", subjects: ["Программирование"], price: 2500, rating: 4.9, experience: "6 лет", education: "СПбГУ", about: "Senior разработчик, обучение с нуля до трудоустройства", status: "approved" },
+        { id: 5, name: "Наталья Погорелова", avatar: "📖", subjects: ["Русский язык", "Математика"], price: 1200, rating: 5.0, experience: "15 лет", education: "МГУ", about: "Репетитор русского и литературы, подготовка к ОГЭ и ЕГЭ", status: "approved" }
+    ];
+
+    const defaultTutorAccounts = [
+        { id: 101, name: "Алексей Иванов", email: "alexey@repit.ru", phone: "+7 (999) 111-22-33", password: "alexey123", role: "tutor", tutorId: 1, documents: [], status: "approved" },
+        { id: 102, name: "Мария Петрова", email: "maria@repit.ru", phone: "+7 (999) 222-33-44", password: "maria123", role: "tutor", tutorId: 2, documents: [], status: "approved" },
+        { id: 103, name: "James Brown", email: "james@repit.ru", phone: "+7 (999) 333-44-55", password: "james123", role: "tutor", tutorId: 3, documents: [], status: "approved" },
+        { id: 104, name: "Олег Смирнов", email: "oleg@repit.ru", phone: "+7 (999) 444-55-66", password: "oleg123", role: "tutor", tutorId: 4, documents: [], status: "approved" },
+        { id: 105, name: "Наталья Погорелова", email: "natalia@repit.ru", phone: "+7 (999) 555-66-77", password: "natalia123", role: "tutor", tutorId: 5, documents: [], status: "approved" }
+    ];
+
+    function loadData() {
+        const savedTutors = localStorage.getItem('repit_tutors');
+        if (savedTutors) {
+            tutorsDB = JSON.parse(savedTutors);
+            tutorsDB.forEach(t => { if (!t.status) t.status = "approved"; });
+        } else {
+            tutorsDB = [...defaultTutors];
+        }
+        localStorage.setItem('repit_tutors', JSON.stringify(tutorsDB));
+        
+        const savedSubjects = localStorage.getItem('repit_subjects');
+        if (savedSubjects) subjects = JSON.parse(savedSubjects);
+        const savedRequests = localStorage.getItem('repit_requests');
+        requests = savedRequests ? JSON.parse(savedRequests) : [];
+        const savedBookings = localStorage.getItem('repit_bookings');
+        bookings = savedBookings ? JSON.parse(savedBookings) : [];
+        const savedMessages = localStorage.getItem('repit_private_messages');
+        privateMessages = savedMessages ? JSON.parse(savedMessages) : [];
+        
+        let users = JSON.parse(localStorage.getItem('repit_users') || '[]');
+        if (users.length === 0) {
+            users = [...defaultTutorAccounts];
+            users.push({ id: 1000, name: "Администратор", email: "admin@repit.ru", phone: "+7 (999) 000-00-00", password: "admin123", role: "admin" });
+        } else {
+            let needSave = false;
+            users.forEach(u => {
+                if (u.role === 'tutor' && !u.status) {
+                    u.status = "approved";
+                    needSave = true;
+                }
+            });
+            if (needSave) localStorage.setItem('repit_users', JSON.stringify(users));
+        }
+        localStorage.setItem('repit_users', JSON.stringify(users));
+    }
+
+    function saveMessages() {
+        localStorage.setItem('repit_private_messages', JSON.stringify(privateMessages));
+    }
+
+    function saveData() {
+        localStorage.setItem('repit_tutors', JSON.stringify(tutorsDB));
+        localStorage.setItem('repit_subjects', JSON.stringify(subjects));
+        localStorage.setItem('repit_requests', JSON.stringify(requests));
+        localStorage.setItem('repit_bookings', JSON.stringify(bookings));
+        saveMessages();
+    }
+
+    // Функции личного чата
+    function getChatId(user1Id, user2Id) {
+        return user1Id < user2Id ? `${user1Id}_${user2Id}` : `${user2Id}_${user1Id}`;
+    }
+
+    function getChatMessages(partnerId) {
+        const chatId = getChatId(currentUser.id, partnerId);
+        return privateMessages.filter(m => m.chatId === chatId).sort((a,b) => a.timestamp - b.timestamp);
+    }
+
+    function sendPrivateMessageTo(partnerId, partnerName, partnerAvatar) {
+        currentChatPartner = { id: partnerId, name: partnerName, avatar: partnerAvatar };
+        openPrivateChat();
+    }
+
+    function openPrivateChat() {
+        if (!currentChatPartner) return;
+        document.getElementById('privateChatTitle').innerHTML = `💬 Чат с ${currentChatPartner.name}`;
+        renderPrivateMessages();
+        document.getElementById('privateChatModal').classList.add('active');
+        setTimeout(() => {
+            const container = document.getElementById('privateChatMessages');
+            container.scrollTop = container.scrollHeight;
+        }, 100);
+    }
+
+    function closePrivateChat() {
+        document.getElementById('privateChatModal').classList.remove('active');
+        currentChatPartner = null;
+    }
+
+    function renderPrivateMessages() {
+        const container = document.getElementById('privateChatMessages');
+        const messages = getChatMessages(currentChatPartner.id);
+        
+        if (messages.length === 0) {
+            container.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-secondary);">💬 Напишите первое сообщение</div>';
+            return;
+        }
+        
+        container.innerHTML = messages.map(m => {
+            const isSent = m.senderId === currentUser.id;
+            return `
+                <div class="private-message ${isSent ? 'sent' : 'received'}">
+                    <div class="message-bubble">${escapeHtml(m.text)}</div>
+                    <div class="message-time">${new Date(m.timestamp).toLocaleString()}</div>
+                </div>
+            `;
+        }).join('');
+        
+        setTimeout(() => {
+            container.scrollTop = container.scrollHeight;
+        }, 100);
+    }
+
+    function sendPrivateMessage() {
+        const input = document.getElementById('privateChatInput');
+        const text = input.value.trim();
+        if (!text || !currentChatPartner) return;
+        
+        const newMessage = {
+            id: Date.now(),
+            chatId: getChatId(currentUser.id, currentChatPartner.id),
+            senderId: currentUser.id,
+            senderName: currentUser.name,
+            receiverId: currentChatPartner.id,
+            receiverName: currentChatPartner.name,
+            text: text,
+            timestamp: Date.now(),
+            read: false
+        };
+        
+        privateMessages.push(newMessage);
+        saveMessages();
+        input.value = '';
+        renderPrivateMessages();
+        
+        // Уведомление собеседнику
+        addNotification(currentChatPartner.id, `💬 Новое сообщение от ${currentUser.name}`);
+    }
+
+    function showMyChatsPage() {
+        if (!currentUser) { showNotification("Войдите в аккаунт", "error"); return; }
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('myChatsPage').classList.add('active');
+        renderChatsList();
+    }
+
+    function renderChatsList() {
+        const users = JSON.parse(localStorage.getItem('repit_users') || '[]');
+        const allBookings = bookings.filter(b => b.status === 'confirmed' && (b.studentId === currentUser.id || b.tutorId === (currentUser.tutorId || currentUser.id)));
+        
+        const chatPartners = new Map();
+        
+        allBookings.forEach(booking => {
+            if (currentUser.role === 'student') {
+                const tutor = tutorsDB.find(t => t.id === booking.tutorId);
+                if (tutor && !chatPartners.has(tutor.id)) {
+                    chatPartners.set(tutor.id, { id: tutor.id, name: tutor.name, avatar: tutor.avatar, role: 'tutor' });
+                }
+            } else if (currentUser.role === 'tutor') {
+                const student = users.find(u => u.id === booking.studentId);
+                if (student && !chatPartners.has(student.id)) {
+                    chatPartners.set(student.id, { id: student.id, name: student.name, avatar: '👨‍🎓', role: 'student' });
+                }
+            }
+        });
+        
+        if (chatPartners.size === 0) {
+            document.getElementById('chatsList').innerHTML = '<p style="text-align:center;">😔 У вас пока нет активных чатов. Запишитесь на занятие, чтобы начать общение.</p>';
+            return;
+        }
+        
+        let chatsHTML = '<div class="requests-table"><table><thead><tr><th>Собеседник</th><th>Последнее сообщение</th><th></th></tr></thead><tbody>';
+        
+        for (let partner of chatPartners.values()) {
+            const messages = getChatMessages(partner.id);
+            const lastMessage = messages.length > 0 ? messages[messages.length-1].text : 'Нет сообщений';
+            const lastMessagePreview = lastMessage.length > 50 ? lastMessage.substring(0, 50) + '...' : lastMessage;
+            
+            chatsHTML += `
+                <tr>
+                    <td style="display: flex; align-items: center; gap: 12px;">
+                        <div class="chat-list-avatar" style="width: 40px; height: 40px; font-size: 1.2rem;">${partner.avatar || '👤'}</div>
+                        <div><strong>${partner.name}</strong><br><small>${partner.role === 'tutor' ? 'Репетитор' : 'Ученик'}</small></div>
+                    </td>
+                    <td><small>${escapeHtml(lastMessagePreview)}</small></td>
+                    <td><button class="btn btn-primary" onclick="openChatWithPartner(${partner.id}, '${partner.name}', '${partner.avatar || '👤'}')">💬 Открыть чат</button></td>
+                </tr>
+            `;
+        }
+        
+        chatsHTML += '</tbody></table></div>';
+        document.getElementById('chatsList').innerHTML = chatsHTML;
+    }
+
+    function openChatWithPartner(partnerId, partnerName, partnerAvatar) {
+        currentChatPartner = { id: partnerId, name: partnerName, avatar: partnerAvatar };
+        openPrivateChat();
+    }
+
+    function isSlotBooked(tutorId, date, time) {
+        const datetime = `${date} ${time}`;
+        return bookings.some(b => b.tutorId === tutorId && b.dateTime === datetime && b.status !== 'rejected');
+    }
+
+    function getBookedSlots(tutorId, date) {
+        return bookings.filter(b => b.tutorId === tutorId && b.dateTime.startsWith(date) && b.status !== 'rejected').map(b => b.dateTime.split(' ')[1]);
+    }
+
+    function openCalendarModal(tutorId) {
+        if (!currentUser) { showNotification("Войдите в аккаунт", "error"); openModal('login'); return; }
+        if (currentUser.role !== 'student') { showNotification("Только ученики могут записываться", "error"); return; }
+        
+        selectedTutorForBooking = tutorsDB.find(t => t.id === tutorId);
+        if (!selectedTutorForBooking) return;
+        
+        document.getElementById('selectedTutorInfo').innerHTML = `
+            <div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
+                <div class="tutor-avatar" style="width: 50px; height: 50px; font-size: 1.5rem;">${selectedTutorForBooking.avatar || '👨‍🏫'}</div>
+                <div><strong>${selectedTutorForBooking.name}</strong><br>💰 ${selectedTutorForBooking.price}₽/час</div>
+            </div>
+        `;
+        
+        selectedDate = null;
+        renderCalendar();
+        document.getElementById('calendarModal').classList.add('active');
+    }
+
+    function renderCalendar() {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = today.getMonth();
+        
+        const firstDay = new Date(year, month, 1);
+        const lastDay = new Date(year, month + 1, 0);
+        const daysInMonth = lastDay.getDate();
+        const startWeekday = firstDay.getDay() || 7;
+        
+        let calendarHTML = '<div class="calendar-grid">';
+        
+        const weekdays = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС'];
+        weekdays.forEach(day => {
+            calendarHTML += `<div style="text-align: center; font-weight: bold; padding: 8px;">${day}</div>`;
+        });
+        
+        for (let i = 1; i < startWeekday; i++) {
+            calendarHTML += '<div></div>';
+        }
+        
+        for (let d = 1; d <= daysInMonth; d++) {
+            const date = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+            const isPast = new Date(year, month, d) < new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            const isWeekend = (new Date(year, month, d).getDay() === 6 || new Date(year, month, d).getDay() === 0);
+            const selectClass = (selectedDate === date) ? 'selected' : '';
+            calendarHTML += `<div class="calendar-day ${isWeekend ? 'weekend' : ''} ${selectClass} ${isPast ? 'disabled' : ''}" 
+                onclick="${!isPast ? `selectDate('${date}')` : ''}">
+                <strong>${d}</strong>
+                ${isWeekend ? '<br><small>📅</small>' : ''}
+            </div>`;
+        }
+        
+        calendarHTML += '</div>';
+        document.getElementById('calendarContainer').innerHTML = calendarHTML;
+        
+        if (selectedDate) {
+            renderTimeSlots(selectedDate);
+        } else {
+            document.getElementById('timeSlotsContainer').innerHTML = '<p style="text-align: center; color: var(--text-secondary);">👆 Выберите дату для просмотра свободного времени</p>';
+        }
+    }
+
+    function selectDate(date) {
+        selectedDate = date;
+        renderCalendar();
+        renderTimeSlots(date);
+    }
+
+    function renderTimeSlots(date) {
+        const bookedSlots = getBookedSlots(selectedTutorForBooking.id, date);
+        
+        if (bookedSlots.length >= timeSlots.length) {
+            document.getElementById('timeSlotsContainer').innerHTML = '<p style="text-align: center; color: #dc3545;">😔 На эту дату нет свободных слотов</p>';
+            return;
+        }
+        
+        let slotsHTML = '<h4 style="margin-bottom: 15px; text-align: center;">⏰ Доступное время</h4>';
+        slotsHTML += '<div class="time-slots">';
+        
+        timeSlots.forEach(slot => {
+            const isBooked = bookedSlots.includes(slot);
+            slotsHTML += `<div class="time-slot ${isBooked ? 'booked' : ''}" 
+                onclick="${!isBooked ? `bookTimeSlot('${date}', '${slot}')` : ''}">
+                🕐 ${slot}
+            </div>`;
+        });
+        
+        slotsHTML += '</div>';
+        document.getElementById('timeSlotsContainer').innerHTML = slotsHTML;
+    }
+
+    function bookTimeSlot(date, time) {
+        const datetime = `${date} ${time}`;
+        
+        if (isSlotBooked(selectedTutorForBooking.id, date, time)) {
+            showNotification("Это время уже занято!", "error");
+            renderTimeSlots(date);
+            return;
+        }
+        
+        const newBooking = {
+            id: Date.now(),
+            tutorId: selectedTutorForBooking.id,
+            tutorName: selectedTutorForBooking.name,
+            tutorPrice: selectedTutorForBooking.price,
+            studentId: currentUser.id,
+            studentName: currentUser.name,
+            studentEmail: currentUser.email,
+            studentPhone: currentUser.phone,
+            dateTime: datetime,
+            status: "pending",
+            createdAt: new Date().toLocaleString()
+        };
+        
+        bookings.push(newBooking);
+        saveData();
+        
+        addNotification(selectedTutorForBooking.id, `📝 Новая запись от ${currentUser.name} на ${new Date(datetime).toLocaleString()}`);
+        addNotification(currentUser.id, `✅ Заявка отправлена репетитору ${selectedTutorForBooking.name} на ${new Date(datetime).toLocaleString()}`);
+        showNotification("Заявка отправлена! Ожидайте подтверждения.", "success");
+        
+        closeCalendarModal();
+    }
+
+    function closeCalendarModal() {
+        document.getElementById('calendarModal').classList.remove('active');
+        selectedTutorForBooking = null;
+        selectedDate = null;
+    }
+
+    function addNotification(userId, message) {
+        let notifications = JSON.parse(localStorage.getItem('repit_notifications') || '[]');
+        notifications.push({ id: Date.now(), userId, message, date: new Date().toLocaleString(), read: false });
+        localStorage.setItem('repit_notifications', JSON.stringify(notifications));
+        if (currentUser && (currentUser.id === userId || currentUser.email === userId)) {
+            const container = document.getElementById('chatMessages');
+            container.innerHTML += `<div class="message support"><div class="message-content">🔔 ${message}</div></div>`;
+            container.scrollTop = container.scrollHeight;
+        }
+    }
+
+    function loadReviews() {
+        const reviews = [
+            { name: "Анна Смирнова", text: "Отличный сервис! Нашла репетитора по математике за 2 часа!", stars: 5 },
+            { name: "Дмитрий Козлов", text: "Готовился к ЕГЭ по информатике. Сдал на 94 балла!", stars: 5 },
+            { name: "Елена Морозова", text: "Очень удобный подбор. Всё честно, цены адекватные!", stars: 5 }
+        ];
+        const container = document.getElementById('reviewsContainer');
+        if (container) container.innerHTML = reviews.map(r => `<div class="review-card"><div class="stars">${'★'.repeat(r.stars)}</div><div class="review-text">"${r.text}"</div><div class="review-author">— ${r.name}</div></div>`).join('');
+    }
+
+    function loadSubjects() {
+        const filter = document.getElementById('subjectFilter');
+        if (filter) filter.innerHTML = '<option value="">Все</option>' + subjects.map(s => `<option>${s}</option>`).join('');
+        const list = document.getElementById('subjectsList');
+        if (list) list.innerHTML = subjects.map(s => `<span class="subject-tag">${s}</span>`).join('');
+    }
+
+    function showProfilePage() {
+        if (!currentUser) { showNotification("Войдите в аккаунт", "error"); return; }
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('profilePage').classList.add('active');
+        renderProfile();
+    }
+
+    function renderProfile() {
+        const container = document.getElementById('profileContent');
+        if (currentUser.role === 'tutor') {
+            const tutor = tutorsDB.find(t => t.id === currentUser.tutorId);
+            const docCount = currentUser.documents ? currentUser.documents.length : 0;
+            container.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 30px; flex-wrap: wrap; margin-bottom: 30px;">
+                    <div class="profile-avatar">${tutor?.avatar || '👨‍🏫'}</div>
+                    <div><h3>${currentUser.name}</h3><p>${currentUser.email}</p><p>📞 ${currentUser.phone}</p><p>⭐ Рейтинг: ${tutor?.rating || '—'}</p></div>
+                </div>
+                <div class="form-group"><label>Образование</label><input type="text" id="profileEdu" value="${tutor?.education || ''}" class="profile-input"></div>
+                <div class="form-group"><label>Опыт работы</label><input type="text" id="profileExp" value="${tutor?.experience || ''}" class="profile-input"></div>
+                <div class="form-group"><label>О себе</label><textarea id="profileAbout" rows="3" class="profile-input">${tutor?.about || ''}</textarea></div>
+                <div class="form-group"><label>Цена (руб/час)</label><input type="number" id="profilePrice" value="${tutor?.price || ''}" class="profile-input"></div>
+                <div class="form-group"><label>Предметы (через запятую)</label><input type="text" id="profileSubjects" value="${tutor?.subjects?.join(', ') || ''}" class="profile-input"></div>
+                <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 20px;">
+                    <button class="btn btn-primary" onclick="saveTutorProfile()">💾 Сохранить изменения</button>
+                    <button class="btn btn-info" onclick="openPasswordModal()">🔑 Сменить пароль</button>
+                </div>
+                <div class="doc-upload-area">
+                    <h4>📄 Подтверждающие документы</h4>
+                    <p>${docCount > 0 ? `✅ Загружено документов: ${docCount}` : '📎 Документы не загружены'}</p>
+                    <button class="btn btn-secondary" style="margin-top: 10px;" onclick="uploadDocuments()">📎 Загрузить документы (диплом, сертификаты)</button>
+                    ${docCount > 0 ? `<div class="doc-list"><h5>Загруженные документы:</h5>${currentUser.documents.map(doc => `<div class="doc-item">📄 ${doc.name}<small> (${doc.uploadedAt})</small></div>`).join('')}</div>` : ''}
+                </div>
+            `;
+        } else {
+            container.innerHTML = `
+                <div style="margin-bottom: 30px;">
+                    <h3>${currentUser.name}</h3>
+                    <p>📧 ${currentUser.email}</p>
+                    <p>📞 ${currentUser.phone}</p>
+                </div>
+                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    <button class="btn btn-primary" onclick="openEditProfileModal()">✏️ Редактировать профиль</button>
+                    <button class="btn btn-info" onclick="openPasswordModal()">🔑 Сменить пароль</button>
+                </div>
+            `;
+        }
+    }
+
+    function saveTutorProfile() {
+        const tutor = tutorsDB.find(t => t.id === currentUser.tutorId);
+        if (tutor) {
+            tutor.education = document.getElementById('profileEdu')?.value || tutor.education;
+            tutor.experience = document.getElementById('profileExp')?.value || tutor.experience;
+            tutor.about = document.getElementById('profileAbout')?.value || tutor.about;
+            tutor.price = parseInt(document.getElementById('profilePrice')?.value) || tutor.price;
+            const subjectsStr = document.getElementById('profileSubjects')?.value;
+            if (subjectsStr) tutor.subjects = subjectsStr.split(',').map(s => s.trim());
+            saveData();
+            showNotification("Профиль обновлен!", "success");
+            renderProfile();
+        }
+    }
+
+    function openEditProfileModal() {
+        document.getElementById('editName').value = currentUser.name;
+        document.getElementById('editPhone').value = currentUser.phone;
+        document.getElementById('editProfileModal').classList.add('active');
+    }
+
+    function closeEditProfileModal() {
+        document.getElementById('editProfileModal').classList.remove('active');
+    }
+
+    function saveProfileChanges() {
+        const newName = document.getElementById('editName')?.value;
+        const newPhone = document.getElementById('editPhone')?.value;
+        if (newName) currentUser.name = newName;
+        if (newPhone) currentUser.phone = newPhone;
+        let users = JSON.parse(localStorage.getItem('repit_users') || '[]');
+        const userIndex = users.findIndex(u => u.id === currentUser.id);
+        if (userIndex !== -1) {
+            users[userIndex].name = currentUser.name;
+            users[userIndex].phone = currentUser.phone;
+            localStorage.setItem('repit_users', JSON.stringify(users));
+        }
+        if (currentUser.role === 'tutor') {
+            const tutor = tutorsDB.find(t => t.id === currentUser.tutorId);
+            if (tutor) tutor.name = currentUser.name;
+            saveData();
+        }
+        localStorage.setItem('repit_current_user', JSON.stringify(currentUser));
+        showNotification("Профиль обновлен!", "success");
+        closeEditProfileModal();
+        updateAuthUI();
+        renderProfile();
+    }
+
+    function openPasswordModal() {
+        document.getElementById('oldPassword').value = '';
+        document.getElementById('newPassword').value = '';
+        document.getElementById('confirmPassword').value = '';
+        document.getElementById('changePasswordModal').classList.add('active');
+    }
+
+    function closePasswordModal() {
+        document.getElementById('changePasswordModal').classList.remove('active');
+    }
+
+    function changePassword() {
+        const oldPass = document.getElementById('oldPassword')?.value;
+        const newPass = document.getElementById('newPassword')?.value;
+        const confirmPass = document.getElementById('confirmPassword')?.value;
+        if (!oldPass || !newPass || !confirmPass) {
+            showNotification("Заполните все поля", "error");
+            return;
+        }
+        if (oldPass !== currentUser.password) {
+            showNotification("Неверный текущий пароль", "error");
+            return;
+        }
+        if (newPass.length < 6) {
+            showNotification("Новый пароль должен быть минимум 6 символов", "error");
+            return;
+        }
+        if (newPass !== confirmPass) {
+            showNotification("Пароли не совпадают", "error");
+            return;
+        }
+        currentUser.password = newPass;
+        let users = JSON.parse(localStorage.getItem('repit_users') || '[]');
+        const userIndex = users.findIndex(u => u.id === currentUser.id);
+        if (userIndex !== -1) {
+            users[userIndex].password = newPass;
+            localStorage.setItem('repit_users', JSON.stringify(users));
+        }
+        localStorage.setItem('repit_current_user', JSON.stringify(currentUser));
+        showNotification("Пароль успешно изменен!", "success");
+        closePasswordModal();
+    }
+
+    function uploadDocuments() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.multiple = true;
+        input.accept = 'image/*,.pdf';
+        input.onchange = (e) => {
+            const files = Array.from(e.target.files);
+            if (files.length > 0) {
+                let users = JSON.parse(localStorage.getItem('repit_users') || '[]');
+                const userIndex = users.findIndex(u => u.id === currentUser.id);
+                if (userIndex !== -1) {
+                    users[userIndex].documents = users[userIndex].documents || [];
+                    files.forEach(file => {
+                        users[userIndex].documents.push({ name: file.name, uploadedAt: new Date().toLocaleString() });
+                    });
+                    localStorage.setItem('repit_users', JSON.stringify(users));
+                    currentUser.documents = users[userIndex].documents;
+                    localStorage.setItem('repit_current_user', JSON.stringify(currentUser));
+                }
+                showNotification(`Загружено документов: ${files.length}. Ожидает проверки администратора.`, "success");
+                renderProfile();
+            }
+        };
+        input.click();
+    }
+
+    function displayTutors(tutors) {
+        const container = document.getElementById('tutorsList');
+        if (!container) return;
+        const approvedTutors = tutors.filter(t => t.status !== 'pending');
+        if (!approvedTutors.length) { container.innerHTML = '<p style="text-align:center;">😔 Репетиторов не найдено</p>'; return; }
+        container.innerHTML = approvedTutors.map(t => `
+            <div class="tutor-card">
+                <div class="tutor-header"><div class="tutor-avatar">${t.avatar || '👨‍🏫'}</div><div class="tutor-info"><h3>${t.name}</h3><div class="tutor-stats"><span>⭐ ${t.rating}</span><span>💰 ${t.price}₽/час</span></div></div></div>
+                <div class="tutor-subjects">${t.subjects.map(s => `<span class="subject-tag">${s}</span>`).join('')}</div>
+                <p>🎓 ${t.education} • Опыт: ${t.experience}</p><p style="font-size:0.85rem;">${t.about}</p>
+                ${currentUser?.role === 'admin' ? `<div style="margin-top:15px;"><button class="btn btn-danger" onclick="deleteTutor(${t.id})">Удалить</button></div>` : 
+                  (currentUser?.role === 'student' ? `<button class="btn btn-primary" style="width:100%;margin-top:15px;" onclick="openCalendarModal(${t.id})">📅 Выбрать время</button>` : 
+                  (currentUser?.role === 'tutor' ? `<div style="margin-top:15px;padding:10px;background:#f0f0f0;border-radius:10px;text-align:center;">👨‍🏫 Вы - репетитор</div>` :
+                  `<button class="btn btn-primary" style="width:100%;margin-top:15px;" onclick="showNotification('Войдите в аккаунт', 'error'); openModal('login')">📅 Записаться</button>`))}
+            </div>
+        `).join('');
+    }
+
+    function filterTutors() {
+        let filtered = [...tutorsDB];
+        const name = document.getElementById('tutorNameSearch')?.value.toLowerCase() || '';
+        const subject = document.getElementById('subjectFilter')?.value || '';
+        const rating = parseFloat(document.getElementById('ratingFilter')?.value || '0');
+        const price = parseInt(document.getElementById('priceFilter')?.value || '10000');
+        if (name) filtered = filtered.filter(t => t.name.toLowerCase().includes(name));
+        if (subject) filtered = filtered.filter(t => t.subjects.includes(subject));
+        if (rating > 0) filtered = filtered.filter(t => t.rating >= rating);
+        if (price < 10000) filtered = filtered.filter(t => t.price <= price);
+        displayTutors(filtered);
+    }
+
+    function showMyLessonsPage() {
+        if (!currentUser) { showNotification("Войдите в аккаунт", "error"); return; }
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('myLessonsPage').classList.add('active');
+        const confirmed = bookings.filter(b => b.studentId === currentUser.id && b.status === 'confirmed');
+        const now = new Date();
+        const upcoming = confirmed.filter(b => new Date(b.dateTime) > now).sort((a,b) => new Date(a.dateTime) - new Date(b.dateTime));
+        const past = confirmed.filter(b => new Date(b.dateTime) <= now);
+        let html = '';
+        if (upcoming.length) {
+            html += '<h3>🟢 Ближайшие занятия</h3>';
+            upcoming.forEach(l => {
+                const tutor = tutorsDB.find(t => t.id === l.tutorId);
+                html += `<div class="upcoming-lesson">
+                    <div>
+                        <strong>${l.tutorName}</strong><br>
+                        📅 ${new Date(l.dateTime).toLocaleString()}<br>
+                        💰 ${l.tutorPrice} ₽/час
+                    </div>
+                    <button class="btn btn-info" onclick="openChatWithPartner(${l.tutorId}, '${l.tutorName}', '${tutor?.avatar || '👨‍🏫'}')">💬 Написать репетитору</button>
+                </div>`;
+            });
+        } else html += '<p>😔 Нет предстоящих занятий</p>';
+        if (past.length) {
+            html += '<h3 style="margin-top:30px;">📚 Прошедшие занятия</h3>';
+            past.forEach(l => { html += `<div class="upcoming-lesson"><div><strong>${l.tutorName}</strong><br>📅 ${new Date(l.dateTime).toLocaleString()}</div><button class="btn btn-secondary" onclick="showNotification('Запись завершена', 'info')">📹 Запись урока</button></div>`; });
+        }
+        document.getElementById('myLessonsList').innerHTML = html;
+    }
+
+    function showTutorSchedulePage() {
+        if (!currentUser || currentUser.role !== 'tutor') { showNotification("Только для репетиторов", "error"); return; }
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('tutorSchedulePage').classList.add('active');
+        const myLessons = bookings.filter(b => b.tutorName === currentUser.name && b.status === 'confirmed');
+        const now = new Date();
+        const upcoming = myLessons.filter(b => new Date(b.dateTime) > now).sort((a,b) => new Date(a.dateTime) - new Date(b.dateTime));
+        const past = myLessons.filter(b => new Date(b.dateTime) <= now);
+        let html = '';
+        if (upcoming.length) {
+            html += '<h3>🟢 Предстоящие занятия</h3>';
+            upcoming.forEach(l => {
+                const student = JSON.parse(localStorage.getItem('repit_users') || '[]').find(u => u.id === l.studentId);
+                html += `<div class="upcoming-lesson">
+                    <div>
+                        <strong>👤 ${l.studentName}</strong><br>
+                        📅 ${new Date(l.dateTime).toLocaleString()}<br>
+                        📞 ${l.studentPhone}<br>
+                        💰 ${l.tutorPrice} ₽/час
+                    </div>
+                    <button class="btn btn-info" onclick="openChatWithPartner(${l.studentId}, '${l.studentName}', '👨‍🎓')">💬 Связаться с учеником</button>
+                </div>`;
+            });
+        } else html += '<p>😔 Нет предстоящих занятий</p>';
+        if (past.length) {
+            html += '<h3 style="margin-top:30px;">📚 Прошедшие занятия</h3>';
+            past.forEach(l => { html += `<div class="upcoming-lesson"><div><strong>👤 ${l.studentName}</strong><br>📅 ${new Date(l.dateTime).toLocaleString()}</div></div>`; });
+        }
+        document.getElementById('tutorScheduleList').innerHTML = html;
+    }
+
+    function showTutorBookingsPage() {
+        if (!currentUser || currentUser.role !== 'tutor') { showNotification("Только для репетиторов", "error"); return; }
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('tutorBookingsPage').classList.add('active');
+        const pending = bookings.filter(b => b.tutorName === currentUser.name && b.status === 'pending');
+        if (!pending.length) { document.getElementById('tutorBookingsList').innerHTML = '<p>😔 Нет новых записей</p>'; return; }
+        document.getElementById('tutorBookingsList').innerHTML = `<div class="requests-table">\n<table>\n<thead>\n<tr>\n<th>Дата и время</th>\n<th>Ученик</th>\n<th>Телефон</th>\n<th>Цена</th>\n<th>Действие</th>\n</tr>\n</thead>\n<tbody>${pending.map(b => `\n<tr>\n<td>${new Date(b.dateTime).toLocaleString()}</td>\n<td>${b.studentName}</td>\n<td>${b.studentPhone}</td>\n<td>${b.tutorPrice} ₽/час</td>\n<td><button class="btn btn-success" onclick="confirmBookingRequest(${b.id})">✅ Подтвердить</button></td>\n</tr>\n`).join('')}</tbody>\n</table>\n</div>`;
+    }
+
+    function confirmBookingRequest(bookingId) {
+        const booking = bookings.find(b => b.id === bookingId);
+        if (booking) { booking.status = "confirmed"; saveData(); showTutorBookingsPage(); showTutorSchedulePage(); addNotification(booking.studentId, `✅ Репетитор ${booking.tutorName} подтвердил занятие на ${new Date(booking.dateTime).toLocaleString()}`); showNotification("Запись подтверждена!", "success"); }
+    }
+
+    function showAdminPanel() {
+        if (!currentUser || currentUser.role !== 'admin') { showNotification("Доступ запрещен", "error"); return; }
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('adminPanelPage').classList.add('active');
+        renderApprovedTutors();
+        renderPendingTutors();
+    }
+
+    function renderPendingTutors() {
+        const users = JSON.parse(localStorage.getItem('repit_users') || '[]');
+        const pendingTutorUsers = users.filter(u => u.role === 'tutor' && u.status === 'pending');
+        const container = document.getElementById('pendingTutorsList');
+        const badge = document.getElementById('pendingCountBadge');
+        if (badge) badge.textContent = pendingTutorUsers.length;
+        if (pendingTutorUsers.length === 0) {
+            container.innerHTML = '<p style="text-align:center;">📭 Нет новых заявок от репетиторов</p>';
+            return;
+        }
+        container.innerHTML = pendingTutorUsers.map(user => {
+            const tutorData = tutorsDB.find(t => t.id === user.tutorId);
+            return `
+                <div class="tutor-card pending">
+                    <div class="tutor-header">
+                        <div class="tutor-avatar">${tutorData?.avatar || '👨‍🏫'}</div>
+                        <div class="tutor-info">
+                            <h3>${user.name} <span class="pending-badge">⏳ На модерации</span></h3>
+                            <div class="tutor-stats"><span>💰 ${tutorData?.price || '—'}₽/час</span></div>
+                        </div>
+                    </div>
+                    <div class="tutor-subjects">${tutorData?.subjects?.map(s => `<span class="subject-tag">${s}</span>`).join('') || '—'}</div>
+                    <p>🎓 ${tutorData?.education || '—'}</p>
+                    <p>📞 ${user.phone}</p>
+                    <p>📧 ${user.email}</p>
+                    <div style="margin-top:15px; display: flex; gap: 10px;">
+                        <button class="btn btn-info" onclick="viewTutorApplication(${user.id})">👁️ Просмотреть и проверить</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function renderApprovedTutors() {
+        const users = JSON.parse(localStorage.getItem('repit_users') || '[]');
+        const approvedTutors = users.filter(u => u.role === 'tutor' && u.status === 'approved');
+        const tutorsListDiv = document.getElementById('tutorsAccountsList');
+        function copyToClipboard(text) { navigator.clipboard.writeText(text); showNotification(`Скопировано: ${text}`, "success"); }
+        if (approvedTutors.length) {
+            tutorsListDiv.innerHTML = `<div class="requests-table">\n<table>\n<thead>\n<tr>\n<th>Имя</th>\n<th>Email (Логин)</th>\n<th>Пароль</th>\n<th>Телефон</th>\n<th>Документы</th>\n<th>Действие</th>\n</tr>\n</thead>\n<tbody>${approvedTutors.map(t => `
+                <tr>
+                    <td>${t.name}</td>
+                    <td>${t.email} <button class="copy-btn" onclick="copyToClipboard('${t.email}')">📋</button></td>
+                    <td class="password-cell">•••••• <button class="copy-btn" onclick="copyToClipboard('${t.password}')">👁️ Скопировать</button></td>
+                    <td>${t.phone || '—'}</td>
+                    <td>${t.documents ? t.documents.length : 0} документов</td>
+                    <td><button class="btn btn-danger" onclick="deleteTutorAccount(${t.id})">Удалить</button></td>
+                </tr>
+            `).join('')}</tbody>\n</table>\n</div>`;
+        } else {
+            tutorsListDiv.innerHTML = '<p style="color: red; text-align: center;">❌ Нет подтвержденных репетиторов</p>';
+        }
+    }
+
+    let pendingTutorToReview = null;
+
+    function viewTutorApplication(userId) {
+        const users = JSON.parse(localStorage.getItem('repit_users') || '[]');
+        const user = users.find(u => u.id === userId);
+        if (!user) return;
+        pendingTutorToReview = user;
+        const tutorData = tutorsDB.find(t => t.id === user.tutorId);
+        const docCount = user.documents ? user.documents.length : 0;
+        const content = document.getElementById('viewTutorContent');
+        content.innerHTML = `
+            <div class="profile-info" style="margin-top: 0;">
+                <h4>👤 Личная информация</h4>
+                <p><strong>Имя:</strong> ${user.name}</p>
+                <p><strong>Email:</strong> ${user.email}</p>
+                <p><strong>Телефон:</strong> ${user.phone}</p>
+                <hr>
+                <h4>📚 Профессиональная информация</h4>
+                <p><strong>Образование:</strong> ${tutorData?.education || 'Не указано'}</p>
+                <p><strong>Опыт работы:</strong> ${tutorData?.experience || 'Не указан'}</p>
+                <p><strong>Предметы:</strong> ${tutorData?.subjects?.join(', ') || 'Не указаны'}</p>
+                <p><strong>Цена за час:</strong> ${tutorData?.price || '—'} ₽</p>
+                <p><strong>О себе:</strong> ${tutorData?.about || 'Не указано'}</p>
+                <hr>
+                <h4>📎 Загруженные документы</h4>
+                ${docCount > 0 ? `<div class="doc-list">${user.documents.map(doc => `<div class="doc-item">📄 ${doc.name}<br><small>Загружен: ${doc.uploadedAt}</small></div>`).join('')}</div>` : '<p>📭 Документы не загружены</p>'}
+            </div>
+        `;
+        document.getElementById('viewTutorModal').classList.add('active');
+    }
+
+    function approveTutorApplication() {
+        if (!pendingTutorToReview) return;
+        let users = JSON.parse(localStorage.getItem('repit_users') || '[]');
+        const userIndex = users.findIndex(u => u.id === pendingTutorToReview.id);
+        if (userIndex !== -1) {
+            users[userIndex].status = 'approved';
+            localStorage.setItem('repit_users', JSON.stringify(users));
+            const tutor = tutorsDB.find(t => t.id === pendingTutorToReview.tutorId);
+            if (tutor) tutor.status = 'approved';
+            saveData();
+            addNotification(pendingTutorToReview.id, `✅ Ваша заявка на регистрацию одобрена!`);
+            showNotification(`Репетитор ${pendingTutorToReview.name} подтвержден`, "success");
+        }
+        closeViewTutorModal();
+        renderPendingTutors();
+        renderApprovedTutors();
+        pendingTutorToReview = null;
+    }
+
+    function rejectTutorApplication() {
+        if (!pendingTutorToReview) return;
+        let users = JSON.parse(localStorage.getItem('repit_users') || '[]');
+        const userIndex = users.findIndex(u => u.id === pendingTutorToReview.id);
+        if (userIndex !== -1) {
+            const rejectedUser = users[userIndex];
+            users.splice(userIndex, 1);
+            localStorage.setItem('repit_users', JSON.stringify(users));
+            const tutorIndex = tutorsDB.findIndex(t => t.id === rejectedUser.tutorId);
+            if (tutorIndex !== -1) tutorsDB.splice(tutorIndex, 1);
+            saveData();
+            showNotification(`Заявка репетитора ${rejectedUser.name} отклонена`, "info");
+        }
+        closeViewTutorModal();
+        renderPendingTutors();
+        renderApprovedTutors();
+        pendingTutorToReview = null;
+    }
+
+    function closeViewTutorModal() {
+        document.getElementById('viewTutorModal').classList.remove('active');
+        pendingTutorToReview = null;
+    }
+
+    function addTutorWithAccount() {
+        const name = document.getElementById('newTutorName')?.value;
+        const subjectsStr = document.getElementById('newTutorSubjects')?.value;
+        const price = parseInt(document.getElementById('newTutorPrice')?.value);
+        const rating = parseFloat(document.getElementById('newTutorRating')?.value);
+        const email = document.getElementById('newTutorEmail')?.value;
+        const password = document.getElementById('newTutorPassword')?.value;
+        const phone = document.getElementById('newTutorPhone')?.value;
+        if (!name || !subjectsStr || !price || !rating || !email || !password || !phone) { showNotification("Заполните все поля!", "error"); return; }
+        if (password.length < 6) { showNotification("Пароль минимум 6 символов", "error"); return; }
+        const users = JSON.parse(localStorage.getItem('repit_users') || '[]');
+        if (users.find(u => u.email === email)) { showNotification("Email уже существует", "error"); return; }
+        const newTutor = { id: Date.now(), name, avatar: document.getElementById('newTutorAvatar')?.value || "👨‍🏫", subjects: subjectsStr.split(',').map(s => s.trim()), price, rating, experience: document.getElementById('newTutorExp')?.value || "Не указан", education: document.getElementById('newTutorEdu')?.value || "Не указано", about: document.getElementById('newTutorAbout')?.value || "Профессиональный репетитор", status: "approved" };
+        tutorsDB.push(newTutor);
+        users.push({ id: Date.now(), name, email, phone, password, role: 'tutor', tutorId: newTutor.id, documents: [], status: "approved" });
+        localStorage.setItem('repit_users', JSON.stringify(users));
+        saveData();
+        filterTutors();
+        showNotification(`✅ Репетитор ${name} добавлен! Логин: ${email}, Пароль: ${password}`, "success");
+        document.getElementById('newTutorName').value = ""; document.getElementById('newTutorSubjects').value = ""; document.getElementById('newTutorPrice').value = ""; document.getElementById('newTutorRating').value = ""; document.getElementById('newTutorEmail').value = ""; document.getElementById('newTutorPassword').value = ""; document.getElementById('newTutorPhone').value = ""; document.getElementById('newTutorAvatar').value = ""; document.getElementById('newTutorExp').value = ""; document.getElementById('newTutorEdu').value = ""; document.getElementById('newTutorAbout').value = "";
+        renderApprovedTutors();
+    }
+
+    function deleteTutor(tutorId) { 
+        if (confirm("Удалить репетитора?")) { 
+            tutorsDB = tutorsDB.filter(t => t.id !== tutorId); 
+            let users = JSON.parse(localStorage.getItem('repit_users') || '[]');
+            users = users.filter(u => u.tutorId !== tutorId);
+            localStorage.setItem('repit_users', JSON.stringify(users));
+            saveData(); 
+            filterTutors(); 
+            showNotification("Удалено", "success"); 
+            if (currentUser?.role === 'admin') {
+                renderApprovedTutors();
+                renderPendingTutors();
+            }
+        } 
+    }
+    
+    function deleteTutorAccount(userId) { 
+        if (confirm("Удалить аккаунт репетитора?")) { 
+            let users = JSON.parse(localStorage.getItem('repit_users') || '[]'); 
+            const user = users.find(u => u.id === userId); 
+            if (user && user.tutorId) tutorsDB = tutorsDB.filter(t => t.id !== user.tutorId); 
+            users = users.filter(u => u.id !== userId); 
+            localStorage.setItem('repit_users', JSON.stringify(users)); 
+            saveData(); 
+            filterTutors(); 
+            if (currentUser?.role === 'admin') {
+                renderApprovedTutors();
+                renderPendingTutors();
+            }
+            showNotification("Аккаунт удален", "success"); 
+        } 
+    }
+    
+    function addSubject() { 
+        const ns = document.getElementById('newSubject')?.value.trim(); 
+        if (ns && !subjects.includes(ns)) { 
+            subjects.push(ns); 
+            saveData(); 
+            loadSubjects(); 
+            showNotification(`Добавлено: ${ns}`, "success"); 
+        } else showNotification("Предмет уже есть", "error"); 
+    }
+
+    function switchAdminTab(tab) {
+        document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        if (tab === 'tutors') {
+            document.querySelectorAll('.admin-tab')[0].classList.add('active');
+            document.getElementById('tabTutors').classList.add('active');
+            renderApprovedTutors();
+        } else if (tab === 'pending') {
+            document.querySelectorAll('.admin-tab')[1].classList.add('active');
+            document.getElementById('tabPending').classList.add('active');
+            renderPendingTutors();
+        } else if (tab === 'add') {
+            document.querySelectorAll('.admin-tab')[2].classList.add('active');
+            document.getElementById('tabAdd').classList.add('active');
+        } else if (tab === 'subjects') {
+            document.querySelectorAll('.admin-tab')[3].classList.add('active');
+            document.getElementById('tabSubjects').classList.add('active');
+        }
+    }
+
+    function handleRegister() {
+        const name = document.getElementById('regName')?.value, email = document.getElementById('regEmail')?.value, phone = document.getElementById('regPhone')?.value, password = document.getElementById('regPassword')?.value, role = document.getElementById('regRole')?.value;
+        if (!name || !email || !phone || !password) { showNotification("Заполните все поля", "error"); return; }
+        if (password.length < 6) { showNotification("Пароль минимум 6 символов", "error"); return; }
+        const users = JSON.parse(localStorage.getItem('repit_users') || '[]');
+        if (users.find(u => u.email === email)) { showNotification("Email уже существует", "error"); return; }
+        if (role === 'tutor') {
+            const newTutor = { id: Date.now(), name, avatar: "👨‍🏫", subjects: [], price: 1000, rating: 5.0, experience: "Не указан", education: "Не указано", about: "Новый репетитор", status: "pending" };
+            tutorsDB.push(newTutor);
+            saveData();
+            const newUser = { id: Date.now(), name, email, phone, password, role: 'tutor', tutorId: newTutor.id, documents: [], status: "pending" };
+            users.push(newUser);
+            localStorage.setItem('repit_users', JSON.stringify(users));
+            showNotification(`Спасибо за регистрацию, ${name}! Ваша заявка отправлена на модерацию.`, "info");
+            closeModal('register');
+            openModal('login');
+        } else {
+            const newUser = { id: Date.now(), name, email, phone, password, role: 'student' };
+            users.push(newUser);
+            localStorage.setItem('repit_users', JSON.stringify(users));
+            currentUser = newUser;
+            localStorage.setItem('repit_current_user', JSON.stringify(currentUser));
+            showNotification(`Добро пожаловать, ${name}!`, "success");
+            closeModal('register');
+            updateAuthUI();
+            filterTutors();
+        }
+    }
+
+    function handleLogin() {
+        const email = document.getElementById('loginEmail')?.value, password = document.getElementById('loginPassword')?.value;
+        const users = JSON.parse(localStorage.getItem('repit_users') || '[]');
+        const user = users.find(u => u.email === email && u.password === password);
+        if (user) {
+            if (user.role === 'tutor' && user.status === 'pending') {
+                showNotification("Ваша заявка на регистрацию еще рассматривается администратором", "info");
+                return;
+            }
+            currentUser = user; 
+            localStorage.setItem('repit_current_user', JSON.stringify(currentUser)); 
+            showNotification(`С возвращением, ${user.name}!`, "success"); 
+            closeModal('login'); 
+            updateAuthUI(); 
+            filterTutors();
+            if (currentUser.role === 'admin') {
+                const pendingCount = users.filter(u => u.role === 'tutor' && u.status === 'pending').length;
+                if (pendingCount > 0) showNotification(`📋 У вас ${pendingCount} новых заявок от репетиторов!`, "info");
+            }
+        }
+        else showNotification("Неверный email или пароль", "error");
+    }
+
+    function logout() { currentUser = null; localStorage.removeItem('repit_current_user'); showNotification("Вы вышли", "info"); updateAuthUI(); filterTutors(); showMainPage(); }
+
+    function updateAuthUI() {
+        const authDiv = document.getElementById('authButtons');
+        const adminLink = document.getElementById('adminPanelLink');
+        const profileLink = document.getElementById('profileLink');
+        const myLessonsLink = document.getElementById('myLessonsLink');
+        const myChatsLink = document.getElementById('myChatsLink');
+        const tutorScheduleLink = document.getElementById('tutorScheduleLink');
+        const tutorBookingsLink = document.getElementById('tutorBookingsLink');
+        if (currentUser) {
+            authDiv.innerHTML = `<div class="user-info"><span>👋 ${currentUser.name} (${currentUser.role === 'admin' ? 'Админ' : currentUser.role === 'tutor' ? 'Репетитор' : 'Ученик'})</span><button class="btn btn-outline" onclick="logout()">🚪 Выйти</button><button class="theme-toggle" onclick="toggleTheme()">🌙</button></div>`;
+            if (adminLink) adminLink.style.display = currentUser.role === 'admin' ? 'inline-block' : 'none';
+            if (profileLink) profileLink.style.display = 'inline-block';
+            if (myLessonsLink) myLessonsLink.style.display = currentUser.role === 'student' ? 'inline-block' : 'none';
+            if (myChatsLink) myChatsLink.style.display = 'inline-block';
+            if (tutorScheduleLink) tutorScheduleLink.style.display = currentUser.role === 'tutor' ? 'inline-block' : 'none';
+            if (tutorBookingsLink) tutorBookingsLink.style.display = currentUser.role === 'tutor' ? 'inline-block' : 'none';
+        } else {
+            authDiv.innerHTML = `<button class="btn btn-outline" onclick="openModal('login')">🔑 Вход</button><button class="btn btn-primary" onclick="openModal('register')">📝 Регистрация</button><button class="theme-toggle" onclick="toggleTheme()">🌙</button>`;
+            if (adminLink) adminLink.style.display = 'none';
+            if (profileLink) profileLink.style.display = 'none';
+            if (myLessonsLink) myLessonsLink.style.display = 'none';
+            if (myChatsLink) myChatsLink.style.display = 'none';
+            if (tutorScheduleLink) tutorScheduleLink.style.display = 'none';
+            if (tutorBookingsLink) tutorBookingsLink.style.display = 'none';
+        }
+    }
+
+    function showMainPage() { document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.getElementById('mainPage').classList.add('active'); }
+    function showTutorsPage() { document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.getElementById('tutorsPage').classList.add('active'); filterTutors(); }
+    function quickSearch() { const q = document.getElementById('searchInput')?.value.toLowerCase(); if (q) { showTutorsPage(); setTimeout(() => { const filtered = tutorsDB.filter(t => t.name.toLowerCase().includes(q) || t.subjects.some(s => s.toLowerCase().includes(q))); displayTutors(filtered); }, 100); } }
+
+    let isDark = false;
+    function toggleTheme() { isDark = !isDark; document.body.classList.toggle('dark', isDark); localStorage.setItem('repit_theme', isDark ? 'dark' : 'light'); }
+
+    const quickQ = ["Сколько стоят занятия?", "Бесплатный пробный урок?", "Как начать?", "Как записаться?"];
+    function loadQuickQuestions() { const c = document.getElementById('quickQuestions'); if (c) c.innerHTML = quickQ.map(q => `<div class="quick-question" onclick="sendQuick('${q}')">${q}</div>`).join(''); }
+    function sendQuick(q) { document.getElementById('chatInput').value = q; sendMessage(); }
+    function toggleChat() { document.getElementById('chatWindow').classList.toggle('active'); }
+    function sendMessage() { const input = document.getElementById('chatInput'), msg = input?.value.trim(); if (!msg) return; const cont = document.getElementById('chatMessages'); cont.innerHTML += `<div class="message user"><div class="message-content">${escapeHtml(msg)}</div></div>`; input.value = ''; cont.scrollTop = cont.scrollHeight; setTimeout(() => { let reply = getReply(msg); cont.innerHTML += `<div class="message support"><div class="message-content">${reply}</div></div>`; cont.scrollTop = cont.scrollHeight; }, 500); }
+    function getReply(m) { const msg = m.toLowerCase(); if (msg.includes('цен')) return "💰 От 1000 до 3000 руб/час"; if (msg.includes('пробн')) return "🎉 Да, есть бесплатный пробный урок!"; if (msg.includes('начать')) return "📝 Зарегистрируйтесь и выберите репетитора"; return "Спасибо за вопрос!"; }
+    function escapeHtml(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+    function togglePassword(id) { const i = document.getElementById(id); i.type = i.type === 'password' ? 'text' : 'password'; }
+    function showNotification(msg, type) { const n = document.getElementById('notification'); n.textContent = msg; n.style.background = type === "error" ? "#dc3545" : type === "info" ? "#17a2b8" : "#28a745"; n.style.display = "block"; setTimeout(() => n.style.display = "none", 3000); }
+    function openModal(type) { document.getElementById(type === 'login' ? 'loginModal' : 'registerModal').classList.add('active'); }
+    function closeModal(type) { document.getElementById(type === 'login' ? 'loginModal' : 'registerModal').classList.remove('active'); }
+    function switchToRegister() { closeModal('login'); openModal('register'); }
+    function switchToLogin() { closeModal('register'); openModal('login'); }
+    window.copyToClipboard = function(text) { navigator.clipboard.writeText(text); showNotification(`Скопировано: ${text}`, "success"); };
+    window.openChatWithPartner = openChatWithPartner;
+
+    loadData(); loadReviews(); loadSubjects(); loadQuickQuestions(); displayTutors(tutorsDB);
+    const savedTheme = localStorage.getItem('repit_theme');
+    if (savedTheme === 'dark') { isDark = true; document.body.classList.add('dark'); }
+    const savedUser = localStorage.getItem('repit_current_user');
+    if (savedUser) { currentUser = JSON.parse(savedUser); updateAuthUI(); }
+    else updateAuthUI();
+    window.onclick = e => { if (e.target.classList.contains('modal')) document.querySelectorAll('.modal').forEach(m => m.classList.remove('active')); };
+</script>
+</body>
+</html>
